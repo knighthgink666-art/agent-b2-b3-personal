@@ -1,0 +1,161 @@
+default_toolset: basic_tools
+
+settings:
+  data_root: ../data
+  cache:
+    # Advanced 3: keep the demo cache small so LRU eviction is easy to observe.
+    max_entries: 10
+
+toolsets:
+  basic_tools:
+    - calculator
+    - file_reader
+    - local_file_search
+    - table_analyzer
+    - format_converter
+    - read_and_convert
+    - search_and_read
+    - analyze_and_convert_table
+    - flaky_retry_probe
+
+tools:
+  calculator:
+    module: skills.calculator
+    function: calculator
+    # Advanced 1: infer parameters/required fields from the Python Skill function signature.
+    auto_schema: true
+    description: Calculate a safe arithmetic expression.
+    returns:
+      result:
+        type: number
+        description: Calculated value.
+
+  file_reader:
+    module: skills.file_reader
+    function: file_reader
+    # Advanced 1: infer public parameters while hiding framework-injected arguments.
+    auto_schema: true
+    hidden_parameters: [data_root]
+    # Advanced 2: retry only recoverable local I/O failures.
+    retry:
+      max_attempts: 2
+      retry_on: [OSError]
+    description: Read a local UTF-8 txt or md file from the data directory.
+    returns:
+      content: {type: string, description: File content.}
+      num_chars: {type: integer, description: Returned character count.}
+      source: {type: string, description: Normalized path relative to data root.}
+      truncated: {type: boolean, description: Whether content was truncated.}
+
+  local_file_search:
+    module: skills.local_file_search
+    function: local_file_search
+    # Advanced 1: infer public parameters while hiding framework-injected arguments.
+    auto_schema: true
+    hidden_parameters: [data_root]
+    # Advanced 2: retry only recoverable local I/O failures.
+    retry:
+      max_attempts: 2
+      retry_on: [OSError]
+    description: Search local txt and md files for query terms.
+    returns:
+      results: {type: array, description: "Ranked paths, snippets, and scores."}
+
+  table_analyzer:
+    module: skills.table_analyzer
+    function: table_analyzer
+    # Advanced 1: infer public parameters while hiding framework-injected arguments.
+    auto_schema: true
+    hidden_parameters: [data_root]
+    # Advanced 2: retry only recoverable local I/O failures.
+    retry:
+      max_attempts: 2
+      retry_on: [OSError]
+    description: Analyze a local CSV or TSV file.
+    returns:
+      num_rows: {type: integer, description: Data row count.}
+      num_columns: {type: integer, description: Column count.}
+      columns: {type: array, description: Column names.}
+      preview: {type: array, description: First rows.}
+      describe: {type: object, description: Numeric statistics by column.}
+
+  format_converter:
+    module: skills.format_converter
+    function: format_converter
+    # Advanced 1: infer public parameters while hiding framework-injected arguments.
+    auto_schema: true
+    hidden_parameters: [output_dir]
+    # Advanced 2: retry only recoverable local I/O failures.
+    retry:
+      max_attempts: 2
+      retry_on: [OSError]
+    description: Convert text to markdown bullets or formatted JSON and write the converted content to a file.
+    returns:
+      formatted_text: {type: string, description: Converted text.}
+      generated_file_path: {type: string, description: Path of the generated output file.}
+
+  flaky_retry_probe:
+    module: skills.flaky_retry_probe
+    function: flaky_retry_probe
+    # Advanced 1: infer parameters/required fields from the Python Skill function signature.
+    auto_schema: true
+    # Advanced 2: deliberately retry recoverable OSError failures for validation.
+    retry:
+      max_attempts: 2
+      retry_on: [OSError]
+    # Advanced 3: keep this retry probe uncached so retry behavior remains visible in tests.
+    cache: false
+    description: Probe B3 retry behavior by failing once with OSError and then succeeding.
+    returns:
+      echo: {type: string, description: Echo text.}
+      recovered: {type: boolean, description: Whether retry recovered.}
+
+  read_and_convert:
+    module: skills.read_and_convert
+    function: read_and_convert
+    # advanced3: expose a fixed composite Skill that reads a txt/md file and converts its content.
+    auto_schema: true
+    hidden_parameters: [data_root, output_dir]
+    description: Read a local txt or md file and convert the content to markdown or JSON.
+    returns:
+      source: {type: string, description: Source path relative to data root.}
+      source_num_chars: {type: integer, description: Number of source characters used.}
+      source_truncated: {type: boolean, description: Whether source content was truncated.}
+      target_format: {type: string, description: Requested output format.}
+      formatted_text: {type: string, description: Converted text.}
+      generated_file_path: {type: string, description: Path of the generated file.}
+
+  search_and_read:
+    module: skills.search_and_read
+    function: search_and_read
+    # advanced3: expose a fixed composite Skill that searches documents and reads one ranked result.
+    auto_schema: true
+    hidden_parameters: [data_root]
+    description: Search local txt or md files and read one ranked result.
+    returns:
+      query: {type: string, description: Search query.}
+      selected_rank: {type: integer, description: Rank selected for reading.}
+      selected_path: {type: string, description: Path of the selected file.}
+      selected_score: {type: integer, description: Search score of the selected file.}
+      selected_snippet: {type: string, description: Snippet from the selected search result.}
+      search_results: {type: array, description: Ranked search results.}
+      content: {type: string, description: Content read from the selected file.}
+      num_chars: {type: integer, description: Returned character count.}
+      truncated: {type: boolean, description: Whether content was truncated.}
+
+  analyze_and_convert_table:
+    module: skills.analyze_and_convert_table
+    function: analyze_and_convert_table
+    # advanced3: expose a fixed composite Skill that analyzes a table and writes a formatted report.
+    auto_schema: true
+    hidden_parameters: [data_root, output_dir]
+    description: Analyze a CSV or TSV file and convert the table summary to markdown or JSON.
+    returns:
+      source: {type: string, description: Source table path relative to data root.}
+      num_rows: {type: integer, description: Data row count.}
+      num_columns: {type: integer, description: Column count.}
+      columns: {type: array, description: Column names.}
+      table_summary: {type: object, description: Full table analyzer output.}
+      target_format: {type: string, description: Requested output format.}
+      formatted_text: {type: string, description: Converted report text.}
+      generated_file_path: {type: string, description: Path of the generated report file.}

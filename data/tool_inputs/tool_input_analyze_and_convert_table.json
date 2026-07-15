@@ -1,0 +1,7 @@
+{
+  "path": "tables/results.csv",
+  "target_format": "markdown",
+  "max_rows_preview": 5,
+  "describe": true,
+  "output_filename": "table_summary_demo.md"
+}

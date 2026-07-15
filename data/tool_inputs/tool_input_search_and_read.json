@@ -1,0 +1,8 @@
+{
+  "query": "tool call",
+  "root_dir": "docs",
+  "file_types": ["txt", "md"],
+  "top_k": 3,
+  "read_rank": 1,
+  "max_chars": 1200
+}

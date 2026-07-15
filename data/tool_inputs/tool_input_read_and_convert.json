@@ -1,0 +1,6 @@
+{
+  "path": "docs/agent_intro.txt",
+  "target_format": "markdown",
+  "max_chars": 1200,
+  "output_filename": "read_and_convert_demo.md"
+}

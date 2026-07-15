@@ -1,0 +1,13 @@
+{
+  "role": "assistant",
+  "content": "",
+  "tool_calls": [
+    {
+      "id": "call_retry_001",
+      "name": "flaky_retry_probe",
+      "args": {
+        "text": "hello retry"
+      }
+    }
+  ]
+}

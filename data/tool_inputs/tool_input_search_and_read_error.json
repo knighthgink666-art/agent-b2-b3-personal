@@ -1,0 +1,7 @@
+{
+  "query": "missing-needle-for-advanced3",
+  "root_dir": "docs",
+  "top_k": 3,
+  "read_rank": 1,
+  "max_chars": 1200
+}

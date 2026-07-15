@@ -1,0 +1,22 @@
+# Python virtual environment and bytecode
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local model files and generated runtime artifacts
+models/
+outputs/
+data/cache_speed_benchmark/
+skills/.flaky_retry_probe_state
+
+# Local editor settings and backup files
+.vscode/
+*.bak*
+
+# B1/B4/B5 runtime inputs not required by the B2/B3 personal submission
+configs/memory*.yaml
+configs/model*.yaml
+data/llm_input.json
+data/memory_inputs/
+data/messages/advance*/
+data/messages/messages_*.json

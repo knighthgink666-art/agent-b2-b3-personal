@@ -1,0 +1,14 @@
+{
+  "tool_calls": [
+    {
+      "id": "call_read_convert_001",
+      "name": "read_and_convert",
+      "args": {
+        "path": "docs/agent_intro.txt",
+        "target_format": "markdown",
+        "max_chars": 1200,
+        "output_filename": "b3_read_and_convert_demo.md"
+      }
+    }
+  ]
+}

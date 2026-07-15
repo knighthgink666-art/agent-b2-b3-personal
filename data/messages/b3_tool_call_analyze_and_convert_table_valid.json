@@ -1,0 +1,15 @@
+{
+  "tool_calls": [
+    {
+      "id": "call_analyze_convert_001",
+      "name": "analyze_and_convert_table",
+      "args": {
+        "path": "tables/results.csv",
+        "target_format": "markdown",
+        "max_rows_preview": 5,
+        "describe": true,
+        "output_filename": "b3_table_summary_demo.md"
+      }
+    }
+  ]
+}

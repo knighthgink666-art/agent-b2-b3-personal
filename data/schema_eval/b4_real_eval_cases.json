@@ -1,0 +1,56 @@
+{
+  "cases": [
+    {
+      "case_id": "calculator_expression",
+      "user_input": "请计算 56*29+81。",
+      "expected_tool_names": ["calculator"],
+      "expected_args": {"expression": "56*29+81"}
+    },
+    {
+      "case_id": "read_limited_document",
+      "user_input": "读取 docs/agent_intro.txt 的前 120 个字符。",
+      "expected_tool_names": ["file_reader"],
+      "expected_args": {"path": "docs/agent_intro.txt", "max_chars": 120}
+    },
+    {
+      "case_id": "search_top_three",
+      "user_input": "在 docs 目录中找包含 Agent 的文档，只返回最相关的 3 个结果。",
+      "expected_tool_names": ["local_file_search"],
+      "expected_args": {"query": "Agent", "root_dir": "docs", "top_k": 3}
+    },
+    {
+      "case_id": "analyze_table_preview",
+      "user_input": "分析 tables/results.csv，返回前两行预览，并计算数值列统计信息。",
+      "expected_tool_names": ["table_analyzer"],
+      "expected_args": {"path": "tables/results.csv", "max_rows_preview": 2, "describe": true}
+    },
+    {
+      "case_id": "convert_text_to_json",
+      "user_input": "把以下键值文本转换为 JSON，并保存为 eval_agent.json：name: Agent\nstatus: ready",
+      "expected_tool_names": ["format_converter"],
+      "expected_args": {
+        "text": "name: Agent\nstatus: ready",
+        "target_format": "json",
+        "output_filename": "eval_agent.json"
+      }
+    },
+    {
+      "case_id": "read_and_convert_document",
+      "user_input": "读取 docs/agent_intro.txt，然后把内容转换成 Markdown。",
+      "expected_tool_names": ["read_and_convert"],
+      "expected_args": {"path": "docs/agent_intro.txt", "target_format": "markdown"}
+    },
+    {
+      "case_id": "search_and_read_document",
+      "user_input": "在 docs 中检索“工具调用”，然后读取最相关的一篇文档。",
+      "expected_tool_names": ["search_and_read"],
+      "expected_args": {"query": "工具调用", "root_dir": "docs", "read_rank": 1}
+    },
+    {
+      "case_id": "analyze_and_convert_table",
+      "user_input": "分析 tables/results.csv，并把表格摘要转换成 Markdown 报告。",
+      "expected_tool_names": ["analyze_and_convert_table"],
+      "expected_args": {"path": "tables/results.csv", "target_format": "markdown"}
+    }
+  ]
+}
